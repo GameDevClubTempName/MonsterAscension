@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class RockGravity : MonoBehaviour {
 
-    public float baseSpeed;
-    public float[] speedMultipliers = new float[4];
-	public float destroyHeight;
-
+    public float baseSpeed = 5.0f;
+    public float[] speedMultipliers = new float[] { 1.0f, 1.2f, 1.5f, 2.0f };
+	public float destroyHeight = 0.0f;
 	
 	void FixedUpdate () {
 		float x = transform.position.x;

@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class PlayerController : MonoBehaviour {
+public class PlayerController : MonoBehaviour
+{
 
 	// In degrees per second:
 	public float rotationSpeed = 540.0f;
 
 	// In units:
-	public float playerDistanceFromTower = 5.0f;
-	public float cameraDistanceFromTower = 10.0f;
+	public float playerDistance = 5.0f;
+	public float cameraDistance = 10.0f;
+	public float backgroundDistance = 15.0f;
 	public float playerHeight = 5.0f;
-	public float lightHeight = 20.0f;
 
 	// How many sides are there to the tower?
 	public int lanes = 8;
@@ -26,8 +27,9 @@ public class PlayerController : MonoBehaviour {
 	// Calculated as 360 / towerSides.
 	private float rotationIncrement;
 
+	private float size = 1.0f;
+
 	private Transform cameraTransform;
-	private Transform lightTransform;
 
 	void Start()
 	{
@@ -41,14 +43,22 @@ public class PlayerController : MonoBehaviour {
 			cameraTransform = camera.GetComponent<Transform>();
 		}
 
-		GameObject light = GameObject.FindGameObjectWithTag("Light");
-		if (light == null)
+		UpdateTransforms();
+	}
+
+	// Temporary way to display level.
+	void UpdateSize (float newSize)
+	{
+		size = newSize;
+		transform.localScale = new Vector3(size, size, size);
+	}
+
+	void OnCollisionEnter (Collision collision)
+	{
+		if (collision.gameObject.tag == "Hazard")
 		{
-			Debug.Log("Light not found!");
-		}
-		else
-		{
-			//lightTransform = light.GetComponent<Transform>();
+			UpdateSize(size * 0.9f);
+			Destroy(collision.gameObject);
 		}
 	}
 
@@ -72,15 +82,14 @@ public class PlayerController : MonoBehaviour {
 
 	void UpdateTransforms ()
 	{
-		double rotationInRadians = rotation / 180 * Math.PI;
-		Vector3 vector = new Vector3((float) Math.Cos(rotationInRadians), playerHeight, (float) Math.Sin(rotationInRadians));
-		transform.position = new Vector3(-playerDistanceFromTower * (float) Math.Cos(rotationInRadians), playerHeight, -playerDistanceFromTower * (float) Math.Sin(rotationInRadians));
-		cameraTransform.position = new Vector3(-cameraDistanceFromTower * (float) Math.Cos(rotationInRadians), playerHeight, -cameraDistanceFromTower * (float) Math.Sin(rotationInRadians));
-		//lightTransform.position = new Vector3(-cameraDistanceFromTower * (float) Math.Cos(rotationInRadians), lightHeight, -cameraDistanceFromTower * (float) Math.Sin(rotationInRadians));
-
+		float rotationInRadians = rotation / 180 * Mathf.PI;
+		float x = Mathf.Cos(rotationInRadians);
+		float z = Mathf.Sin(rotationInRadians);
+		transform.position = new Vector3(-playerDistance * x, playerHeight, -playerDistance * z);
+		cameraTransform.position = new Vector3(-cameraDistance * x, playerHeight, -cameraDistance * z);
+		
 		transform.LookAt(cameraTransform);
 		cameraTransform.LookAt(transform);
-		//lightTransform.LookAt(transform);
 	}
 
 	void FixedUpdate ()
@@ -95,6 +104,6 @@ public class PlayerController : MonoBehaviour {
 
 	void Update ()
 	{
-		rotationInput = (int) Input.GetAxisRaw("Horizontal");
+		rotationInput = (int)Input.GetAxisRaw("Horizontal");
 	}
 }
