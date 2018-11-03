@@ -12,10 +12,11 @@ public class GameController : MonoBehaviour {
 	public int maxSpawnAttempts;
 	public float spawnWait;
 	public float startWait;
+	public float levelupWait;
 	public float spawnNoise;
 	public float baseSpeed = 5.0f;
     public float[] speedMultipliers = new float[] { 1.0f, 1.2f, 1.5f, 2.0f };
-	public int monsterRange = 3;
+	public int monsterRange = 0;
 
 	public int minWavesUntilNextMonster = 1;
 	public int maxWavesUntilNextMonster = 5;
@@ -35,7 +36,7 @@ public class GameController : MonoBehaviour {
 			playerController = player.GetComponent<PlayerController>();
 		}
 	}
-
+	
 	public float GetSpeed ()
 	{
 		return baseSpeed * speedMultipliers[playerController.GetLevel()];

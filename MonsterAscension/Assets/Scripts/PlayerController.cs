@@ -14,9 +14,13 @@ public class PlayerController : MonoBehaviour
 	public float cameraDistance = 10.0f;
 	public float backgroundDistance = 15.0f;
 	public float playerHeight = 5.0f;
+	public float cameraHeight = 6.0f;
 
-	// How many sides are there to the tower?
-	public int lanes = 8;
+	// Number of lanes to the tower:
+	public int lanes = 16;
+
+	// How many monsters need to be collected, per level, to get to the next?
+	public int[] monsterLevels = new int[] { 5, 10, 20 };
 
 	// In degrees:
 	private float rotation = 0f;
@@ -27,7 +31,11 @@ public class PlayerController : MonoBehaviour
 	// Calculated as 360 / towerSides.
 	private float rotationIncrement;
 
-	private float size = 1.0f;
+	// In range 0-3 (for 4 levels):
+	private int level = 0;
+
+	// Counts up to monsterLevels[level], then levels-up:
+	private int monstersCollected = 0;
 
 	private Transform cameraTransform;
 
@@ -46,33 +54,66 @@ public class PlayerController : MonoBehaviour
 		UpdateTransforms();
 	}
 
+	// Public accessor:
 	public int GetLevel ()
 	{
-		return 0;
+		return level;
 	}
 
+	// Public accessor: returns the lane the player is in
 	public int GetLane ()
 	{
 		return (int) Mathf.Round(rotation / 360 * lanes);
 	}
 
-	// Temporary way to display level.
-	void UpdateSize (float newSize)
+	// Called when the final monster for this level has been collected.
+	void LevelUp ()
 	{
-		size = newSize;
-		transform.localScale = new Vector3(size, size, size);
+		
 	}
 
+	// Called when player has hit a hazard on the lowest level.
+	void GameOver ()
+	{
+		
+	}
+
+	// Called whenever the player collects a Monster can.
+	void CollectMonster()
+	{
+		monstersCollected++;
+		if (monstersCollected >= monsterLevels[level])
+		{
+			monstersCollected = 0;
+			LevelUp();
+		}
+	}
+
+	// Called whenever the player hits a hazard.
+	void HitHazard ()
+	{
+		level--;
+		if (level < 0)
+		{
+			GameOver();
+		} else
+		{
+			// If player is still alive, the rocks need to slow down.
+		}
+	}
+
+	// Called when the player hits an object.
+	// If object is a hazard, calls HitHazard() and destroys object.
+	// If object is a Monster can, calls CollectMonster() and destroys object.
 	void OnCollisionEnter (Collision collision)
 	{
-		Debug.Log("Collision!");
 		if (collision.gameObject.tag == "Hazard")
 		{
-			UpdateSize(size * 0.8f);
+			// HitHazard();
 			Destroy(collision.gameObject);
 		} else if (collision.gameObject.tag == "Monster")
 		{
-			UpdateSize(size * 1.25f);
+			// CollectMonster();
 			Destroy(collision.gameObject);
 		}
 	}
@@ -101,10 +142,10 @@ public class PlayerController : MonoBehaviour
 		float x = Mathf.Cos(rotationInRadians);
 		float z = Mathf.Sin(rotationInRadians);
 		transform.position = new Vector3(-playerDistance * x, playerHeight, -playerDistance * z);
-		cameraTransform.position = new Vector3(-cameraDistance * x, playerHeight, -cameraDistance * z);
-		
-		transform.LookAt(cameraTransform);
-		cameraTransform.LookAt(transform);
+		cameraTransform.position = new Vector3(-cameraDistance * x, cameraHeight, -cameraDistance * z);
+
+		transform.rotation = Quaternion.Euler(0, rotation, 0);
+		cameraTransform.rotation = Quaternion.Euler(0, rotation, 0);
 	}
 
 	void FixedUpdate ()

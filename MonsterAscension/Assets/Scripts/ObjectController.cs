@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Gravity : MonoBehaviour {
+public class ObjectController : MonoBehaviour {
 
 	public float destroyHeight = 0.0f;
 
 	private GameController gameController;
+	private float speed;
 
 	void Start ()
 	{
@@ -19,15 +20,15 @@ public class Gravity : MonoBehaviour {
 		{
 			gameController = game.GetComponent<GameController>();
 		}
-
+		speed = gameController.GetSpeed();
 	}
 
 	void FixedUpdate () {
 		float x = transform.position.x;
-		float y = transform.position.y - Time.fixedDeltaTime * gameController.GetSpeed();
+		float y = transform.position.y - Time.fixedDeltaTime * speed;
 		float z = transform.position.z;
 
-		if (y < 0)
+		if (y < destroyHeight)
 		{
 			Destroy(gameObject);
 		}
