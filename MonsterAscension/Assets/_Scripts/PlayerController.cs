@@ -9,8 +9,8 @@ public class PlayerController : MonoBehaviour {
 	public float rotationSpeed = 540.0f;
 
 	// In units:
-	public float playerDistanceFromTower = 5.0f;
-	public float cameraDistanceFromTower = 10.0f;
+	public float playerDistanceFromTower = 0.9f;
+	public float cameraDistanceFromTower = 1.0f;
 	public float playerHeight = 5.0f;
 	public float lightHeight = 20.0f;
 

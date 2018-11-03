@@ -287,8 +287,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationSpeed: 540
-  playerDistanceFromTower: 5
-  cameraDistanceFromTower: 10
+  playerDistanceFromTower: 0.6
+  cameraDistanceFromTower: 1
   playerHeight: 5
   lightHeight: 20
   lanes: 8
