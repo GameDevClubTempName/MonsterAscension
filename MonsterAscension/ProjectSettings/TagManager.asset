@@ -7,6 +7,7 @@ TagManager:
   - Tower
   - Background
   - Hazard
+  - Monster
   layers:
   - Default
   - TransparentFX

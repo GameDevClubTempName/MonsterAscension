@@ -46,6 +46,16 @@ public class PlayerController : MonoBehaviour
 		UpdateTransforms();
 	}
 
+	public int GetLevel ()
+	{
+		return 0;
+	}
+
+	public int GetLane ()
+	{
+		return (int) Mathf.Round(rotation / 360 * lanes);
+	}
+
 	// Temporary way to display level.
 	void UpdateSize (float newSize)
 	{
@@ -55,9 +65,14 @@ public class PlayerController : MonoBehaviour
 
 	void OnCollisionEnter (Collision collision)
 	{
+		Debug.Log("Collision!");
 		if (collision.gameObject.tag == "Hazard")
 		{
-			UpdateSize(size * 0.9f);
+			UpdateSize(size * 0.8f);
+			Destroy(collision.gameObject);
+		} else if (collision.gameObject.tag == "Monster")
+		{
+			UpdateSize(size * 1.25f);
 			Destroy(collision.gameObject);
 		}
 	}
