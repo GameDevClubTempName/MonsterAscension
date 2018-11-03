@@ -10,14 +10,22 @@ public class GameController : MonoBehaviour {
 	public int lanes;
 	public float spawnWait;
 	public float startWait;
+	public float spawnNoise;
 	
 	void Start () {
 		StartCoroutine(SpawnHazards());
 	}
 	
+	IEnumerator SpawnHazardOnDelay (GameObject hazard, Vector3 spawnPosition, Quaternion spawnRotation, float delay)
+	{
+		yield return new WaitForSeconds(delay);
+		Instantiate(hazard, spawnPosition, spawnRotation);
+	}
+
 	IEnumerator SpawnHazards ()
 	{
 		yield return new WaitForSeconds(startWait);
+		bool alternator = false;
 		while (true)
 		{
 			bool[] spawns = new bool[lanes];
@@ -34,12 +42,18 @@ public class GameController : MonoBehaviour {
 					continue;
 				}
 				float angle = (2 * Mathf.PI / lanes) * lane;
+				if (alternator)
+				{
+					// 1/2 of a lane distance: alternate between spawning in lanes and in-between lanes
+					angle += Mathf.PI / lanes;
+				}
 				float x = spawnDistance * Mathf.Sin(angle);
 				float z = spawnDistance * Mathf.Cos(angle);
 				Vector3 spawnPosition = new Vector3(x, spawnHeight, z);
 				Quaternion spawnRotation = Quaternion.identity;
-				Instantiate(hazard, spawnPosition, spawnRotation);
+				StartCoroutine(SpawnHazardOnDelay(hazard, spawnPosition, spawnRotation, Random.Range(0, spawnNoise)));
 			}
+			alternator = !alternator;
 			yield return new WaitForSeconds(spawnWait);
 		}
 	}
