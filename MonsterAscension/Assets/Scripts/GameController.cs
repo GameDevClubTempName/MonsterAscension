@@ -5,6 +5,17 @@ using UnityEngine;
 public class GameController : MonoBehaviour {
 
 	public GameObject hazard;
+
+	//holds reference to tower prefab
+	public GameObject tower;
+
+	//holds location of tower spawn points
+	public Transform towerOneSpawn, towerTwoSpwan;
+
+	//holds location of tower destroy point and a float to hold y position of towerDestroy
+	public Transform towerDestroy;
+	[SerializeField]private float towerDestroyY;
+
 	public float spawnHeight;
 	public float spawnDistance;
 	public int lanes;
@@ -12,8 +23,16 @@ public class GameController : MonoBehaviour {
 	public float spawnWait;
 	public float startWait;
 	public float spawnNoise;
-	
+
+	//controls speed scrolling for a tower
+	public float towerSpeed;
+
+	//holds references to two towers to control scrolling
+	[SerializeField]private GameObject towerUp, towerDown;
+
+
 	void Start () {
+		StartTower ();
 		StartCoroutine(SpawnHazards());
 	}
 	
@@ -56,6 +75,38 @@ public class GameController : MonoBehaviour {
 			}
 			alternator = !alternator;
 			yield return new WaitForSeconds(spawnWait);
+		}
+	}
+
+	/**
+	 * Creates two tower models, then starts scrolling them
+	 */
+	private void StartTower() {
+		towerDown = Instantiate (tower, towerOneSpawn);
+		towerUp = Instantiate (tower, towerSpwan);
+		towerDestroyY = towerDestroy.position.y;
+
+		StartCoroutine (TowerScrolling());
+	}
+
+	IEnumerator TowerScrolling () {
+		while (true) {
+
+			float towerSync = 1;
+
+			if (towerDown.transform.position.y <= towerDestroyY) {
+				float newY = towerDown.transform.position.y + 60;
+				Vector3 newPos = new Vector3(0f, newY, 0f);
+
+				Destroy (towerDown);
+				towerDown = towerUp;
+				towerUp = Instantiate (tower, newPos, towerDown.transform.rotation);
+			}
+
+			towerDown.transform.position += Vector3.down * towerSpeed;
+			towerUp.transform.position += Vector3.down * towerSpeed;
+
+			yield return new WaitForFixedUpdate ();
 		}
 	}
 }
