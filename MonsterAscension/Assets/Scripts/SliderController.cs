@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI; 
 
 public class SliderController : MonoBehaviour {
 	public Slider Slider; 
 	public int startingMonster = 0; 
 	public int currentMonster = 0; 
 	public int currentLvlMonster = 5; 
+
 	// Use this for initialization
 	void Start () {
 		
@@ -23,14 +25,14 @@ public class SliderController : MonoBehaviour {
 		}
 		
 
+
 		if(hitByBoulder){
 			currentMonster --; 
 			Slider.value = currentMonster; 
-			if(monsterCollected == 0){
+			if(monsterCollected == 0 && currentLvlMonster == 5){
 				//ded
 			}
 		}
-
 
 	}
 }
