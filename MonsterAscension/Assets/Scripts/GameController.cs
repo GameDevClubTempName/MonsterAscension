@@ -8,6 +8,7 @@ public class GameController : MonoBehaviour {
 	public float spawnHeight;
 	public float spawnDistance;
 	public int lanes;
+	public int maxSpawnAttempts;
 	public float spawnWait;
 	public float startWait;
 	public float spawnNoise;
@@ -29,7 +30,7 @@ public class GameController : MonoBehaviour {
 		while (true)
 		{
 			bool[] spawns = new bool[lanes];
-			int numSpawnAttempts = Mathf.FloorToInt(Random.Range(1, lanes - 1));
+			int numSpawnAttempts = Mathf.FloorToInt(Random.Range(1, maxSpawnAttempts));
 			for (int i = 0; i < numSpawnAttempts; i++)
 			{
 				int lane = Mathf.FloorToInt(Random.Range(0, lanes));
