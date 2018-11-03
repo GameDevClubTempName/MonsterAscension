@@ -14,40 +14,77 @@ public class GameController : MonoBehaviour {
 
 	//holds location of tower destroy point and a float to hold y position of towerDestroy
 	public Transform towerDestroy;
-	[SerializeField]private float towerDestroyY;
-
+	private float towerDestroyY;
+	
+	public GameObject monster;
 	public float spawnHeight;
 	public float spawnDistance;
 	public int lanes;
 	public int maxSpawnAttempts;
 	public float spawnWait;
 	public float startWait;
+	public float levelupWait;
 	public float spawnNoise;
 
 	//controls speed scrolling for a tower
 	public float towerSpeed;
 
 	//holds references to two towers to control scrolling
-	[SerializeField]private GameObject towerUp, towerDown;
+	private GameObject towerUp, towerDown;
+	
+	public float baseSpeed = 5.0f;
+	public float[] speedMultipliers = new float[] { 1.0f, 1.2f, 1.5f, 2.0f };
+	public int monsterRange = 0;
 
+	public int minWavesUntilNextMonster = 1;
+	public int maxWavesUntilNextMonster = 5;
+	private int wavesUntilNextMonster = 4;
+
+	private PlayerController playerController;
 
 	void Start () {
 		StartTower ();
-		StartCoroutine(SpawnHazards());
+		StartCoroutine(SpawnObjects());
+		GameObject player = GameObject.FindGameObjectWithTag("Player");
+		if (player == null)
+		{
+			Debug.Log("Player not found!");
+		}
+		else
+		{
+			playerController = player.GetComponent<PlayerController>();
+		}
 	}
 	
-	IEnumerator SpawnHazardOnDelay (GameObject hazard, Vector3 spawnPosition, Quaternion spawnRotation, float delay)
+	public float GetSpeed ()
+	{
+		return baseSpeed * speedMultipliers[playerController.GetLevel()];
+	}
+	
+	Vector3 GetSpawnPosition (float angle)
+	{
+		return new Vector3(-spawnDistance * Mathf.Sin(angle), spawnHeight, -spawnDistance * Mathf.Cos(angle));
+	}
+
+	IEnumerator SpawnObjectOnDelay(GameObject hazard, Vector3 spawnPosition, Quaternion spawnRotation, float delay)
 	{
 		yield return new WaitForSeconds(delay);
 		Instantiate(hazard, spawnPosition, spawnRotation);
 	}
 
-	IEnumerator SpawnHazards ()
+	IEnumerator SpawnObjects ()
 	{
 		yield return new WaitForSeconds(startWait);
 		bool alternator = false;
 		while (true)
 		{
+			bool monsterSpawn = false;
+			wavesUntilNextMonster--;
+			if (wavesUntilNextMonster <= 0)
+			{
+				wavesUntilNextMonster = Mathf.FloorToInt(Random.Range(minWavesUntilNextMonster, maxWavesUntilNextMonster));
+				monsterSpawn = true;
+			}
 			bool[] spawns = new bool[lanes];
 			int numSpawnAttempts = Mathf.FloorToInt(Random.Range(1, maxSpawnAttempts));
 			for (int i = 0; i < numSpawnAttempts; i++)
@@ -67,13 +104,14 @@ public class GameController : MonoBehaviour {
 					// 1/2 of a lane distance: alternate between spawning in lanes and in-between lanes
 					angle += Mathf.PI / lanes;
 				}
-				float x = spawnDistance * Mathf.Sin(angle);
-				float z = spawnDistance * Mathf.Cos(angle);
-				Vector3 spawnPosition = new Vector3(x, spawnHeight, z);
-				Quaternion spawnRotation = Quaternion.identity;
-				StartCoroutine(SpawnHazardOnDelay(hazard, spawnPosition, spawnRotation, Random.Range(0, spawnNoise)));
+				StartCoroutine(SpawnObjectOnDelay(hazard, GetSpawnPosition(angle), Quaternion.identity, Random.Range(0, spawnNoise)));
 			}
 			alternator = !alternator;
+			if (monsterSpawn)
+			{
+				float angle = (2 * Mathf.PI / lanes) * (playerController.GetLane() + Mathf.FloorToInt(Random.Range(-monsterRange, monsterRange + 1)));
+				StartCoroutine(SpawnObjectOnDelay(monster, GetSpawnPosition(angle), Quaternion.identity, spawnNoise / 2 + spawnWait / 2));
+			}
 			yield return new WaitForSeconds(spawnWait);
 		}
 	}

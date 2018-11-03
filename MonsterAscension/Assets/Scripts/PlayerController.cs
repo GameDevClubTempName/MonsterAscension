@@ -3,19 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class PlayerController : MonoBehaviour {
+public class PlayerController : MonoBehaviour
+{
 
 	// In degrees per second:
 	public float rotationSpeed = 540.0f;
 
 	// In units:
-	public float playerDistanceFromTower = 5.0f;
-	public float cameraDistanceFromTower = 10.0f;
+	public float playerDistance = 5.0f;
+	public float cameraDistance = 10.0f;
+	public float backgroundDistance = 15.0f;
 	public float playerHeight = 5.0f;
-	public float lightHeight = 20.0f;
+	public float cameraHeight = 6.0f;
 
-	// How many sides are there to the tower?
-	public int lanes = 8;
+	// Number of lanes to the tower:
+	public int lanes = 16;
+
+	// How many monsters need to be collected, per level, to get to the next?
+	public int[] monsterLevels = new int[] { 5, 10, 20 };
 
 	// In degrees:
 	private float rotation = 0f;
@@ -26,8 +31,13 @@ public class PlayerController : MonoBehaviour {
 	// Calculated as 360 / towerSides.
 	private float rotationIncrement;
 
+	// In range 0-3 (for 4 levels):
+	private int level = 0;
+
+	// Counts up to monsterLevels[level], then levels-up:
+	private int monstersCollected = 0;
+
 	private Transform cameraTransform;
-	private Transform lightTransform;
 
 	void Start()
 	{
@@ -40,16 +50,72 @@ public class PlayerController : MonoBehaviour {
 		{
 			cameraTransform = camera.GetComponent<Transform>();
 		}
+		
+		UpdateTransforms();
+	}
 
-		/*GameObject light = GameObject.FindGameObjectWithTag("Light");
-		if (light == null)
+	// Public accessor:
+	public int GetLevel ()
+	{
+		return level;
+	}
+
+	// Public accessor: returns the lane the player is in
+	public int GetLane ()
+	{
+		return (int) Mathf.Round(rotation / 360 * lanes);
+	}
+
+	// Called when the final monster for this level has been collected.
+	void LevelUp ()
+	{
+		
+	}
+
+	// Called when player has hit a hazard on the lowest level.
+	void GameOver ()
+	{
+		
+	}
+
+	// Called whenever the player collects a Monster can.
+	void CollectMonster()
+	{
+		monstersCollected++;
+		if (monstersCollected >= monsterLevels[level])
 		{
-			Debug.Log("Light not found!");
+			monstersCollected = 0;
+			LevelUp();
 		}
-		else
+	}
+
+	// Called whenever the player hits a hazard.
+	void HitHazard ()
+	{
+		level--;
+		if (level < 0)
 		{
-			//lightTransform = light.GetComponent<Transform>();
-		}*/
+			GameOver();
+		} else
+		{
+			// If player is still alive, the rocks need to slow down.
+		}
+	}
+
+	// Called when the player hits an object.
+	// If object is a hazard, calls HitHazard() and destroys object.
+	// If object is a Monster can, calls CollectMonster() and destroys object.
+	void OnCollisionEnter (Collision collision)
+	{
+		if (collision.gameObject.tag == "Hazard")
+		{
+			// HitHazard();
+			Destroy(collision.gameObject);
+		} else if (collision.gameObject.tag == "Monster")
+		{
+			// CollectMonster();
+			Destroy(collision.gameObject);
+		}
 	}
 
 	float ConstrainRotation (float rotation)
@@ -72,15 +138,14 @@ public class PlayerController : MonoBehaviour {
 
 	void UpdateTransforms ()
 	{
-		double rotationInRadians = rotation / 180 * Math.PI;
-		Vector3 vector = new Vector3((float) Math.Cos(rotationInRadians), playerHeight, (float) Math.Sin(rotationInRadians));
-		transform.position = new Vector3(-playerDistanceFromTower * (float) Math.Cos(rotationInRadians), playerHeight, -playerDistanceFromTower * (float) Math.Sin(rotationInRadians));
-		cameraTransform.position = new Vector3(-cameraDistanceFromTower * (float) Math.Cos(rotationInRadians), playerHeight, -cameraDistanceFromTower * (float) Math.Sin(rotationInRadians));
-		//lightTransform.position = new Vector3(-cameraDistanceFromTower * (float) Math.Cos(rotationInRadians), lightHeight, -cameraDistanceFromTower * (float) Math.Sin(rotationInRadians));
+		float rotationInRadians = rotation / 180 * Mathf.PI;
+		float x = Mathf.Cos(rotationInRadians);
+		float z = Mathf.Sin(rotationInRadians);
+		transform.position = new Vector3(-playerDistance * x, playerHeight, -playerDistance * z);
+		cameraTransform.position = new Vector3(-cameraDistance * x, cameraHeight, -cameraDistance * z);
 
-		transform.LookAt(cameraTransform);
-		cameraTransform.LookAt(transform);
-		//lightTransform.LookAt(transform);
+		transform.rotation = Quaternion.Euler(0, rotation, 0);
+		cameraTransform.rotation = Quaternion.Euler(0, rotation, 0);
 	}
 
 	void FixedUpdate ()
@@ -95,6 +160,6 @@ public class PlayerController : MonoBehaviour {
 
 	void Update ()
 	{
-		rotationInput = (int) Input.GetAxisRaw("Horizontal");
+		rotationInput = (int)Input.GetAxisRaw("Horizontal");
 	}
 }
