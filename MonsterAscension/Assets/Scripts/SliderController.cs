@@ -8,6 +8,8 @@ public class SliderController : MonoBehaviour {
 	public int startingMonster = 0; 
 	public int currentMonster = 0; 
 	public int currentLvlMonster = 5; 
+	public bool monsterCollected; 
+	public bool hitByBoulder; 
 
 	// Use this for initialization
 	void Start () {
@@ -18,8 +20,8 @@ public class SliderController : MonoBehaviour {
 	void Update () {
 		if(monsterCollected){
 			currentMonster ++; 
-			Silder.value = currentMonster; 
-			if(monsterCollected == currentLvlMonster){
+			Slider.value = currentMonster; 
+			if(currentMonster == currentLvlMonster){
 				currentMonster += 5; 
 			}
 		}
@@ -29,8 +31,9 @@ public class SliderController : MonoBehaviour {
 		if(hitByBoulder){
 			currentMonster --; 
 			Slider.value = currentMonster; 
-			if(monsterCollected == 0 && currentLvlMonster == 5){
+			if(currentMonster == 0 && currentLvlMonster == 5){
 				//ded
+				Slider.value = 0; 
 			}
 		}
 
