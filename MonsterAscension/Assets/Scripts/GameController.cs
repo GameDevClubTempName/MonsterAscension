@@ -10,7 +10,7 @@ public class GameController : MonoBehaviour {
 	public GameObject tower;
 
 	//holds location of tower spawn points
-	public Transform towerOneSpawn, towerTwoSpwan;
+	public Transform towerOneSpawn, towerTwoSpawn;
 
 	//holds location of tower destroy point and a float to hold y position of towerDestroy
 	public Transform towerDestroy;
@@ -83,7 +83,7 @@ public class GameController : MonoBehaviour {
 	 */
 	private void StartTower() {
 		towerDown = Instantiate (tower, towerOneSpawn);
-		towerUp = Instantiate (tower, towerSpwan);
+		towerUp = Instantiate (tower, towerTwoSpawn);
 		towerDestroyY = towerDestroy.position.y;
 
 		StartCoroutine (TowerScrolling());
@@ -91,8 +91,6 @@ public class GameController : MonoBehaviour {
 
 	IEnumerator TowerScrolling () {
 		while (true) {
-
-			float towerSync = 1;
 
 			if (towerDown.transform.position.y <= towerDestroyY) {
 				float newY = towerDown.transform.position.y + 60;

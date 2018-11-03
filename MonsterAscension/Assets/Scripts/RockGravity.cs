@@ -14,7 +14,7 @@ public class RockGravity : MonoBehaviour {
 		float y = transform.position.y - Time.fixedDeltaTime * baseSpeed * speedMultipliers[0];
 		float z = transform.position.z;
 
-		if (y < 0)
+		if (y < destroyHeight)
 		{
 			Destroy(gameObject);
 		}

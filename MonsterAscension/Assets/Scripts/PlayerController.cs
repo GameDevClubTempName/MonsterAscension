@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour {
 			cameraTransform = camera.GetComponent<Transform>();
 		}
 
-		GameObject light = GameObject.FindGameObjectWithTag("Light");
+		/*GameObject light = GameObject.FindGameObjectWithTag("Light");
 		if (light == null)
 		{
 			Debug.Log("Light not found!");
@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviour {
 		else
 		{
 			//lightTransform = light.GetComponent<Transform>();
-		}
+		}*/
 	}
 
 	float ConstrainRotation (float rotation)
