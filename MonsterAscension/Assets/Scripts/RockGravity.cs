@@ -6,14 +6,21 @@ public class RockGravity : MonoBehaviour {
 
     public float baseSpeed;
     public float[] speedMultipliers = new float[4];
+	public float destroyHeight;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
 	
-	// Update is called once per frame
-	void Update () {
-		
+	void FixedUpdate () {
+		float x = transform.position.x;
+		float y = transform.position.y - Time.fixedDeltaTime * baseSpeed * speedMultipliers[0];
+		float z = transform.position.z;
+
+		if (y < 0)
+		{
+			Destroy(gameObject);
+		}
+		else
+		{
+			transform.position = new Vector3(x, y, z);
+		}
 	}
 }
