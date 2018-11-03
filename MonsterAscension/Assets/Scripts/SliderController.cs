@@ -6,18 +6,20 @@ using UnityEngine.UI;
 public class SliderController : MonoBehaviour {
 	public Slider Slider; 
 	public int startingMonster = 0; 
-	public int currentMonster = 0; 
+	public int currentMonster = 1; 
 	public int currentLvlMonster = 5; 
 	public bool monsterCollected; 
 	public bool hitByBoulder; 
 
 	// Use this for initialization
 	void Start () {
-		
+		Slider.minValue = 0; 
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		Slider.maxValue = currentLvlMonster; 
+
 		if(monsterCollected){
 			currentMonster ++; 
 			Slider.value = currentMonster; 

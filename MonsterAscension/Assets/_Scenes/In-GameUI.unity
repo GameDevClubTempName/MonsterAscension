@@ -834,7 +834,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 0}
   m_FillRect: {fileID: 541116920}
   m_HandleRect: {fileID: 0}
@@ -859,7 +859,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 439d63d3f2a66e14a89bf6239554223d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Slider: {fileID: 0}
+  Slider: {fileID: 1904638500}
   startingMonster: 0
   currentMonster: 0
   currentLvlMonster: 5
