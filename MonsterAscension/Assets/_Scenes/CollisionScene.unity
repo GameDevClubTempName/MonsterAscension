@@ -221,12 +221,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hazard: {fileID: 1084902936982156, guid: 0fb3f5017c4611048ab173ac086c69b4, type: 2}
   monster: {fileID: 1153219628216938, guid: 3c0db09c064d6d743adc844b9a739d7e, type: 2}
-  spawnHeight: 15
+  spawnHeight: 25
   spawnDistance: 5
   lanes: 16
   maxSpawnAttempts: 15
   spawnWait: 0.7
   startWait: 1
+  levelupWait: 0
   spawnNoise: 0.3
   baseSpeed: 5
   speedMultipliers:
@@ -308,7 +309,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 534669902}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 5, z: -10}
+  m_LocalPosition: {x: 0, y: 5, z: -15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -394,8 +395,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1054012091}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 5, z: 0}
-  m_LocalScale: {x: 8, y: 10, z: 8}
+  m_LocalPosition: {x: 0, y: 10, z: 0}
+  m_LocalScale: {x: 8, y: 20, z: 8}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
@@ -500,10 +501,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotationSpeed: 160
   playerDistance: 5
-  cameraDistance: 10
+  cameraDistance: 15
   backgroundDistance: 15
   playerHeight: 5
+  cameraHeight: 6
   lanes: 8
+  monsterLevels: 050000000a00000014000000
 --- !u!54 &1794589086
 Rigidbody:
   m_ObjectHideFlags: 0
