@@ -55,8 +55,9 @@ public class PlayerController : MonoBehaviour
 	public AnimationClip[] playerAnimation2;
 	public AnimationClip[] playerAnimation3;
 	public AnimationClip[] playerAnimation4;
+	
 	void Start()
-	{
+	{	
 		GameObject camera = GameObject.FindGameObjectWithTag("MainCamera");
 		if (camera == null)
 		{
@@ -76,7 +77,7 @@ public class PlayerController : MonoBehaviour
 		{
 			lanes = game.GetComponent<GameController>().lanes;
 		}
-		GameOverImage.enabled = false;
+		
 		LevelUpImage.enabled = false;
 		UpdateTransforms();
 	}
@@ -97,17 +98,19 @@ public class PlayerController : MonoBehaviour
 	void LevelUp ()
 	{
 		level++;
-		if(level == 1){
+		if(level == 0){
 			Animator.Play("playerAnimation1");
-		}else if (level ==2){
+		}else if (level ==1){
 			Animator.Play("playerAnimation2");
-		}else if(level == 3){
+		}else if(level == 2){
 			Animator.Play("playerAnimation3");
-		}else if(level == 4){
+		}else if(level == 3){
 			Animator.Play("playerAnimation4");
 		}
 
 		LevelUpImage.enabled = true;
+		Slider Slider = (Slider)FindObjectOfType(typeof(Slider));
+		Slider.GetComponent<SliderController>().levelUpSlider(monsterLevels[level]);
 		// Animation-switching code here
 	}
 
@@ -128,6 +131,8 @@ public class PlayerController : MonoBehaviour
 			monstersCollected = 0;
 			LevelUp();
 		}
+		Slider Slider = (Slider)FindObjectOfType(typeof(Slider));
+		Slider.GetComponent<SliderController>().updateSlider(monstersCollected);
 	}
 
 	// Called whenever the player hits a hazard.
@@ -135,11 +140,14 @@ public class PlayerController : MonoBehaviour
 	{
 		level--;
 		monstersCollected = 0;
+
 		if (level < 0)
 		{
 			level = 0;
 			GameOver();
 		}
+		Slider Slider = (Slider)FindObjectOfType(typeof(Slider));
+		Slider.GetComponent<SliderController>().updateSlider(monstersCollected);
 	}
 	
 	// Called when the player hits an object.
