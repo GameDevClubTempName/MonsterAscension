@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -113,7 +114,8 @@ public class PlayerController : MonoBehaviour
 	// Called when player has hit a hazard on the lowest level.
 	void GameOver ()
 	{
-		GameOverImage.enabled = true;
+	
+		SceneManager.LoadScene("GameOver" , LoadSceneMode.Single);
 		// Switch to game-over screen here
 	}
 
