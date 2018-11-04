@@ -1,0 +1,166 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System;
+
+public class PlayerController : MonoBehaviour
+{
+
+	// In degrees per second:
+	public float rotationSpeed = 540.0f;
+
+	// In units:
+	public float playerDistance = 5.0f;
+	public float cameraDistance = 10.0f;
+	public float backgroundDistance = 15.0f;
+	public float playerHeight = 5.0f;
+	public float cameraHeight = 6.0f;
+
+	// Number of lanes to the tower:
+	public int lanes = 16;
+
+	// How many monsters need to be collected, per level, to get to the next?
+	public int[] monsterLevels = new int[] { 5, 10, 20 };
+
+	// In degrees:
+	private float rotation = 0f;
+
+	// In set {-1, 0, 1}, from Input.GetAxisRaw()
+	private int rotationInput;
+
+	// Calculated as 360 / towerSides.
+	private float rotationIncrement;
+
+	// In range 0-3 (for 4 levels):
+	private int level = 0;
+
+	// Counts up to monsterLevels[level], then levels-up:
+	private int monstersCollected = 0;
+
+	private Transform cameraTransform;
+
+	void Start()
+	{
+		GameObject camera = GameObject.FindGameObjectWithTag("MainCamera");
+		if (camera == null)
+		{
+			Debug.Log("Camera not found!");
+		}
+		else
+		{
+			cameraTransform = camera.GetComponent<Transform>();
+		}
+		
+		UpdateTransforms();
+	}
+
+	// Public accessor:
+	public int GetLevel ()
+	{
+		return level;
+	}
+
+	// Public accessor: returns the lane the player is in
+	public int GetLane ()
+	{
+		return (int) Mathf.Round(rotation / 360 * lanes);
+	}
+
+	// Called when the final monster for this level has been collected.
+	void LevelUp ()
+	{
+		
+	}
+
+	// Called when player has hit a hazard on the lowest level.
+	void GameOver ()
+	{
+		
+	}
+
+	// Called whenever the player collects a Monster can.
+	void CollectMonster()
+	{
+		monstersCollected++;
+		if (monstersCollected >= monsterLevels[level])
+		{
+			monstersCollected = 0;
+			LevelUp();
+		}
+	}
+
+	// Called whenever the player hits a hazard.
+	void HitHazard ()
+	{
+		level--;
+		if (level < 0)
+		{
+			GameOver();
+		} else
+		{
+			// If player is still alive, the rocks need to slow down.
+		}
+	}
+
+	// Called when the player hits an object.
+	// If object is a hazard, calls HitHazard() and destroys object.
+	// If object is a Monster can, calls CollectMonster() and destroys object.
+	void OnTriggerEnter (Collider collider)
+	{
+		Debug.Log("Collision!");
+		if (collider.gameObject.tag == "Hazard")
+		{
+			// HitHazard();
+			Destroy(collider.gameObject);
+		} else if (collider.gameObject.tag == "Monster")
+		{
+			// CollectMonster();
+			Destroy(collider.gameObject);
+		}
+	}
+
+	float ConstrainRotation (float rotation)
+	{
+		while (rotation > 360)
+		{
+			rotation -= 360;
+		}
+		while (rotation < 0)
+		{
+			rotation += 360;
+		}
+		return rotation;
+	}
+
+	float RoundToNearestLane (float rotation)
+	{
+		return (float) Math.Floor(rotation / 360 * lanes) * 360 / lanes;
+	}
+
+	void UpdateTransforms ()
+	{
+		float rotationInRadians = rotation / 180 * Mathf.PI;
+		float x = Mathf.Cos(rotationInRadians);
+		float z = Mathf.Sin(rotationInRadians);
+		transform.position = new Vector3(-playerDistance * x, playerHeight, -playerDistance * z);
+		cameraTransform.position = new Vector3(-cameraDistance * x, cameraHeight, -cameraDistance * z);
+
+		transform.rotation = Quaternion.Euler(0, rotation, 0);
+		cameraTransform.rotation = Quaternion.Euler(0, -rotation + 90, 0);
+	}
+
+	void FixedUpdate ()
+	{
+		if (rotationInput != 0)
+		{
+			rotation += Time.fixedDeltaTime * rotationSpeed * rotationInput;
+			rotation = ConstrainRotation(rotation);
+			UpdateTransforms();
+		}
+	}
+
+	void Update ()
+	{
+		rotationInput = (int)Input.GetAxisRaw("Horizontal");
+	}
+}
