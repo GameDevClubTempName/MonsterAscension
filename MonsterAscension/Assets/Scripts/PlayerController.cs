@@ -47,6 +47,8 @@ public class PlayerController : MonoBehaviour
 	// Number of lanes to the tower, derived from GameController
 	private int lanes;
 
+	private SliderController sliderController;
+
 	private Transform cameraTransform;
 	public Image GameOverImage; 
 	public Image LevelUpImage;
@@ -77,6 +79,15 @@ public class PlayerController : MonoBehaviour
 		{
 			lanes = game.GetComponent<GameController>().lanes;
 		}
+
+		GameObject slider = GameObject.FindGameObjectWithTag("Slider");
+		if (slider == null)
+		{
+			Debug.Log("Slider not found!");
+		} else
+		{
+			sliderController = slider.GetComponent<SliderController>();
+		}
 		
 		LevelUpImage.enabled = false;
 		UpdateTransforms();
@@ -98,26 +109,19 @@ public class PlayerController : MonoBehaviour
 	void LevelUp ()
 	{
 		level++;
-		if(level == 0){
-			Animator.Play("playerAnimation1");
-		}else if (level ==1){
-			Animator.Play("playerAnimation2");
-		}else if(level == 2){
-			Animator.Play("playerAnimation3");
-		}else if(level == 3){
-			Animator.Play("playerAnimation4");
-		}
-
+		Animator.Play("playerAnimation" + level.ToString());
+		
 		LevelUpImage.enabled = true;
-		Slider Slider = (Slider)FindObjectOfType(typeof(Slider));
-		Slider.GetComponent<SliderController>().levelUpSlider(monsterLevels[level]);
+		sliderController.levelUpSlider(monsterLevels[level]);
 		// Animation-switching code here
 	}
 
 	// Called when player has hit a hazard on the lowest level.
 	void GameOver ()
 	{
-	
+		monstersCollected = 0;
+		sliderController.levelUpSlider(monsterLevels[0]);
+		sliderController.updateSlider(0);
 		SceneManager.LoadScene("GameOver" , LoadSceneMode.Single);
 		// Switch to game-over screen here
 	}
@@ -131,8 +135,8 @@ public class PlayerController : MonoBehaviour
 			monstersCollected = 0;
 			LevelUp();
 		}
-		Slider Slider = (Slider)FindObjectOfType(typeof(Slider));
-		Slider.GetComponent<SliderController>().updateSlider(monstersCollected);
+
+		sliderController.updateSlider(monstersCollected);
 	}
 
 	// Called whenever the player hits a hazard.
@@ -146,8 +150,8 @@ public class PlayerController : MonoBehaviour
 			level = 0;
 			GameOver();
 		}
-		Slider Slider = (Slider)FindObjectOfType(typeof(Slider));
-		Slider.GetComponent<SliderController>().updateSlider(monstersCollected);
+
+		sliderController.updateSlider(0);
 	}
 	
 	// Called when the player hits an object.
@@ -158,14 +162,14 @@ public class PlayerController : MonoBehaviour
 		if (collider.gameObject.tag == "Hazard")
 		{
 			HitHazard();
-			StartCoroutine(blinkPlayer());
+			//StartCoroutine(blinkPlayer());
 			Destroy(collider.gameObject);
 		} else if (collider.gameObject.tag == "Monster")
 		{
 			CollectMonster();
 			Destroy(collider.gameObject);
-			parWings1.Play ();
-			parWings2.Play ();
+			//parWings1.Play ();
+			//parWings2.Play ();
 		}
 	}
 
