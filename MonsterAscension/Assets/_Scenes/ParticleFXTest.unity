@@ -249,20 +249,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hazard: {fileID: 1084902936982156, guid: 0fb3f5017c4611048ab173ac086c69b4, type: 2}
   tower: {fileID: 1129039020551902, guid: 0d4a0b9d257c7ec45a1c18004f394124, type: 2}
+  monster: {fileID: 1153219628216938, guid: 3c0db09c064d6d743adc844b9a739d7e, type: 2}
   towerOneSpawn: {fileID: 933861880}
   towerTwoSpawn: {fileID: 688543011}
   towerDestroy: {fileID: 98853336}
-  monster: {fileID: 1153219628216938, guid: 3c0db09c064d6d743adc844b9a739d7e, type: 2}
   spawnHeight: 30
   spawnDistance: 12
   lanes: 16
   maxSpawnAttempts: 12
-  spawnWait: 1
+  waveDistance: 10
   startWait: 1
-  levelupWait: 0
   spawnNoise: 0.2
-  towerSpeed: 0.05
-  baseSpeed: 8
+  basePlayerSpeed: 5
+  baseObjectSpeed: 5
   speedMultipliers:
   - 1
   - 1.2
@@ -5545,20 +5544,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 1794589080}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d04beda0d6537c4d89d7f6216a5a9de, type: 3}
+  m_Script: {fileID: 11500000, guid: 9a256d87b92af4d41bad675ab19d41d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   center: {fileID: 933861880}
   parWings1: {fileID: 1909238660}
   parWings2: {fileID: 1019884011}
-  rotationSpeed: 60
+  rotationSpeed: 180
+  playerDistanceFromTower: 0.9
+  cameraDistanceFromTower: 1
   playerDistance: 12
   cameraDistance: 15
   backgroundDistance: 15
   playerHeight: 0
-  cameraHeight: 1
-  lanes: 16
+  cameraHeight: 0
   monsterLevels: 050000000a00000014000000
+  GameOverImage: {fileID: 0}
+  Animator: {fileID: 0}
+  playerAnimation1: []
+  playerAnimation2: []
+  playerAnimation3: []
+  playerAnimation4: []
 --- !u!1 &1909238658
 GameObject:
   m_ObjectHideFlags: 0
