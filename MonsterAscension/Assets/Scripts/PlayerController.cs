@@ -41,6 +41,7 @@ public class PlayerController : MonoBehaviour
 
 	private Transform cameraTransform;
 	public Image GameOverImage; 
+	public Image LevelUpImage;
 	public Animator Animator;
 	public AnimationClip[] playerAnimation1;
 	public AnimationClip[] playerAnimation2;
@@ -67,7 +68,8 @@ public class PlayerController : MonoBehaviour
 		{
 			lanes = game.GetComponent<GameController>().lanes;
 		}
-		///GameOverImage.enabled = false;
+		GameOverImage.enabled = false;
+		LevelUpImage.enabled = false;
 		UpdateTransforms();
 	}
 
@@ -96,13 +98,15 @@ public class PlayerController : MonoBehaviour
 		}else if(level == 4){
 			Animator.Play("playerAnimation4");
 		}
+
+		LevelUpImage.enabled = true;
 		// Animation-switching code here
 	}
 
 	// Called when player has hit a hazard on the lowest level.
 	void GameOver ()
 	{
-		//GameOverImage.enabled = true;
+		GameOverImage.enabled = true;
 		// Switch to game-over screen here
 	}
 
