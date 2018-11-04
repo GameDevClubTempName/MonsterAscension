@@ -13,7 +13,7 @@ public class UIController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(Input.GetMouseButtonDown(0)){
-			SceneManager.LoadScene("PlayerAnimation" , LoadSceneMode.Single);
+			SceneManager.LoadScene("MainScene" , LoadSceneMode.Single);
 			Debug.Log("This part is working");	
 		}
 	}
