@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -39,7 +40,12 @@ public class PlayerController : MonoBehaviour
 	private int lanes;
 
 	private Transform cameraTransform;
-
+	public Image GameOverImage; 
+	public Animator Animator;
+	public AnimationClip[] playerAnimation1;
+	public AnimationClip[] playerAnimation2;
+	public AnimationClip[] playerAnimation3;
+	public AnimationClip[] playerAnimation4;
 	void Start()
 	{
 		GameObject camera = GameObject.FindGameObjectWithTag("MainCamera");
@@ -61,7 +67,7 @@ public class PlayerController : MonoBehaviour
 		{
 			lanes = game.GetComponent<GameController>().lanes;
 		}
-
+		GameOverImage.enabled = false;
 		UpdateTransforms();
 	}
 
@@ -81,12 +87,22 @@ public class PlayerController : MonoBehaviour
 	void LevelUp ()
 	{
 		level++;
+		if(level == 1){
+			Animator.Play("playerAnimation1");
+		}else if (level ==2){
+			Animator.Play("playerAnimation2");
+		}else if(level == 3){
+			Animator.Play("playerAnimation3");
+		}else if(level == 4){
+			Animator.Play("playerAnimation4");
+		}
 		// Animation-switching code here
 	}
 
 	// Called when player has hit a hazard on the lowest level.
 	void GameOver ()
 	{
+		GameOverImage.enabled = true;
 		// Switch to game-over screen here
 	}
 
