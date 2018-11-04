@@ -249,28 +249,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hazard: {fileID: 1084902936982156, guid: 0fb3f5017c4611048ab173ac086c69b4, type: 2}
   tower: {fileID: 1129039020551902, guid: 0d4a0b9d257c7ec45a1c18004f394124, type: 2}
+  monster: {fileID: 1153219628216938, guid: 3c0db09c064d6d743adc844b9a739d7e, type: 2}
   towerOneSpawn: {fileID: 933861880}
   towerTwoSpawn: {fileID: 688543011}
   towerDestroy: {fileID: 98853336}
-  monster: {fileID: 1153219628216938, guid: 3c0db09c064d6d743adc844b9a739d7e, type: 2}
   spawnHeight: 30
   spawnDistance: 12
   lanes: 16
-  maxSpawnAttempts: 12
-  spawnWait: 1
+  maxSpawnAttempts: 15
+  waveDistance: 10
   startWait: 1
-  levelupWait: 0
-  spawnNoise: 0.2
-  towerSpeed: 0.05
-  baseSpeed: 8
+  spawnNoise: 4
+  basePlayerSpeed: 10
+  baseObjectSpeed: 10
   speedMultipliers:
   - 1
-  - 1.2
-  - 1.5
   - 2
-  monsterRange: 3
-  minWavesUntilNextMonster: 2
-  maxWavesUntilNextMonster: 6
+  - 4
+  - 8
+  monsterRange: 4
+  minWavesUntilNextMonster: 1
+  maxWavesUntilNextMonster: 2
 --- !u!1 &534669902
 GameObject:
   m_ObjectHideFlags: 0
@@ -677,8 +676,6 @@ MonoBehaviour:
   rotationSpeed: 180
   playerDistance: 12
   cameraDistance: 15
-  backgroundDistance: 15
   playerHeight: 0
   cameraHeight: 1
-  lanes: 16
   monsterLevels: 050000000a00000014000000

@@ -5,20 +5,15 @@ using System;
 
 public class PlayerController : MonoBehaviour
 {
-
 	// In degrees per second:
-	public float rotationSpeed = 540.0f;
+	public float rotationSpeed = 180.0f;
 
 	// In units:
 	public float playerDistance = 5.0f;
 	public float cameraDistance = 10.0f;
-	public float backgroundDistance = 15.0f;
 	public float playerHeight = 5.0f;
 	public float cameraHeight = 6.0f;
-
-	// Number of lanes to the tower:
-	public int lanes = 16;
-
+	
 	// How many monsters need to be collected, per level, to get to the next?
 	public int[] monsterLevels = new int[] { 5, 10, 20 };
 
@@ -37,6 +32,9 @@ public class PlayerController : MonoBehaviour
 	// Counts up to monsterLevels[level], then levels-up:
 	private int monstersCollected = 0;
 
+	// Number of lanes to the tower, derived from GameController
+	private int lanes;
+
 	private Transform cameraTransform;
 
 	void Start()
@@ -50,7 +48,17 @@ public class PlayerController : MonoBehaviour
 		{
 			cameraTransform = camera.GetComponent<Transform>();
 		}
-		
+
+		GameObject game = GameObject.FindGameObjectWithTag("GameController");
+		if (game == null)
+		{
+			Debug.Log("Game not found!");
+		}
+		else
+		{
+			lanes = game.GetComponent<GameController>().lanes;
+		}
+
 		UpdateTransforms();
 	}
 
@@ -63,19 +71,20 @@ public class PlayerController : MonoBehaviour
 	// Public accessor: returns the lane the player is in
 	public int GetLane ()
 	{
-		return (int) Mathf.Round(rotation / 360 * lanes);
+		return (int) Mathf.Round((-rotation + 90) / 360 * lanes);
 	}
 
 	// Called when the final monster for this level has been collected.
 	void LevelUp ()
 	{
-		
+		level++;
+		// Animation-switching code here
 	}
 
 	// Called when player has hit a hazard on the lowest level.
 	void GameOver ()
 	{
-		
+		// Switch to game-over screen here
 	}
 
 	// Called whenever the player collects a Monster can.
@@ -93,28 +102,26 @@ public class PlayerController : MonoBehaviour
 	void HitHazard ()
 	{
 		level--;
+		monstersCollected = 0;
 		if (level < 0)
 		{
+			level = 0;
 			GameOver();
-		} else
-		{
-			// If player is still alive, the rocks need to slow down.
 		}
 	}
-
+	
 	// Called when the player hits an object.
 	// If object is a hazard, calls HitHazard() and destroys object.
 	// If object is a Monster can, calls CollectMonster() and destroys object.
 	void OnTriggerEnter (Collider collider)
 	{
-		Debug.Log("Collision!");
 		if (collider.gameObject.tag == "Hazard")
 		{
-			// HitHazard();
+			HitHazard();
 			Destroy(collider.gameObject);
 		} else if (collider.gameObject.tag == "Monster")
 		{
-			// CollectMonster();
+			CollectMonster();
 			Destroy(collider.gameObject);
 		}
 	}

@@ -4,37 +4,50 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour {
 
-	public GameObject hazard;
-
-	//holds reference to tower prefab
-	public GameObject tower;
-
-	//holds location of tower spawn points
+	// References to hazard, tower, and monster prefabs:
+	public GameObject hazard, tower, monster;
+	
+	// Location of tower spawn points:
 	public Transform towerOneSpawn, towerTwoSpawn;
 
-	//holds location of tower destroy point and a float to hold y position of towerDestroy
+	// Location of tower destroy point:
 	public Transform towerDestroy;
-	private float towerDestroyY;
-	
-	public GameObject monster;
+
+	// How high do objects spawn, in units? (should be out of view)
 	public float spawnHeight;
+
+	// How far away from the tower are objects, in units?
 	public float spawnDistance;
-	public int lanes;
-	public int maxSpawnAttempts;
-	public float spawnWait;
-	public float startWait;
-	public float levelupWait;
-	public float spawnNoise;
 
-	//controls speed scrolling for a tower
-	public float towerSpeed;
+	// Number of sides to the tower:
+	public int lanes = 16;
 
-	//holds references to two towers to control scrolling
+	// Theoretical maximum for # hazards spawned in a wave.
+	// Likely lower, because hazards will try to spawn on top of each other.
+	public int maxSpawnAttempts = 14;
+
+	// Distance, in units, between waves:
+	public float waveDistance = 10.0f;
+
+	// Time to wait at start of game before spawning first wave.
+	// This is not done via distance because a specified time is more useful.
+	public float startWait = 1.0f;
+
+	// Random variation, in units, between hazards in the same wave:
+	public float spawnNoise = 2.0f;
+	
+	// References to two towers to control scrolling
 	private GameObject towerUp, towerDown;
 	
-	public float baseSpeed = 5.0f;
-	public float[] speedMultipliers = new float[] { 1.0f, 1.2f, 1.5f, 2.0f };
-	public int monsterRange = 0;
+	// The speed of the player, and the speed of objects falling, in units per second:
+	public float basePlayerSpeed = 5.0f;
+	public float baseObjectSpeed = 5.0f;
+
+	// Multipliers on basePlayerSpeed, determined by the current player level:
+	public float[] speedMultipliers = new float[] { 1.0f, 1.5f, 2.0f, 3.0f };
+
+	// Maximum # lanes to the left or the right of the player that Monster cans may spawn.
+	public int monsterRange = 3;
 
 	public int minWavesUntilNextMonster = 1;
 	public int maxWavesUntilNextMonster = 5;
@@ -43,8 +56,6 @@ public class GameController : MonoBehaviour {
 	private PlayerController playerController;
 
 	void Start () {
-		StartTower ();
-		StartCoroutine(SpawnObjects());
 		GameObject player = GameObject.FindGameObjectWithTag("Player");
 		if (player == null)
 		{
@@ -52,13 +63,26 @@ public class GameController : MonoBehaviour {
 		}
 		else
 		{
+			Debug.Log("Player found!");
 			playerController = player.GetComponent<PlayerController>();
 		}
+
+		StartTower();
+		StartCoroutine(SpawnObjects());
 	}
-	
-	public float GetSpeed ()
+
+	// How fast is the player moving?
+	// This is equivalent to how fast the tower is moving downwards.
+	public float GetPlayerSpeed ()
 	{
-		return baseSpeed * speedMultipliers[playerController.GetLevel()];
+		return basePlayerSpeed * speedMultipliers[playerController.GetLevel()];
+	}
+
+	// How fast do objects fall at?
+	// Relative to the tower, they will always fall at baseObjectSpeed.
+	public float GetObjectSpeed()
+	{
+		return GetPlayerSpeed() + baseObjectSpeed;
 	}
 	
 	Vector3 GetSpawnPosition (float angle)
@@ -110,9 +134,9 @@ public class GameController : MonoBehaviour {
 			if (monsterSpawn)
 			{
 				float angle = (2 * Mathf.PI / lanes) * (playerController.GetLane() + Mathf.FloorToInt(Random.Range(-monsterRange, monsterRange + 1)));
-				StartCoroutine(SpawnObjectOnDelay(monster, GetSpawnPosition(angle), Quaternion.identity, spawnNoise / 2 + spawnWait / 2));
+				StartCoroutine(SpawnObjectOnDelay(monster, GetSpawnPosition(angle), Quaternion.identity, (waveDistance / 2 + spawnNoise / 2) / GetPlayerSpeed()));
 			}
-			yield return new WaitForSeconds(spawnWait);
+			yield return new WaitForSeconds(waveDistance / GetPlayerSpeed());
 		}
 	}
 
@@ -122,7 +146,6 @@ public class GameController : MonoBehaviour {
 	private void StartTower() {
 		towerDown = Instantiate (tower, towerOneSpawn);
 		towerUp = Instantiate (tower, towerTwoSpawn);
-		towerDestroyY = towerDestroy.position.y;
 
 		StartCoroutine (TowerScrolling());
 	}
@@ -130,7 +153,7 @@ public class GameController : MonoBehaviour {
 	IEnumerator TowerScrolling () {
 		while (true) {
 
-			if (towerDown.transform.position.y <= towerDestroyY) {
+			if (towerDown.transform.position.y <= towerDestroy.position.y) {
 				float newY = towerDown.transform.position.y + 60;
 				Vector3 newPos = new Vector3(0f, newY, 0f);
 
@@ -138,9 +161,10 @@ public class GameController : MonoBehaviour {
 				towerDown = towerUp;
 				towerUp = Instantiate (tower, newPos, towerDown.transform.rotation);
 			}
-
-			towerDown.transform.position += Vector3.down * towerSpeed;
-			towerUp.transform.position += Vector3.down * towerSpeed;
+			
+			Vector3 addVector = Vector3.down * GetPlayerSpeed() * Time.fixedDeltaTime;
+			towerDown.transform.position += addVector;
+			towerUp.transform.position += addVector;
 
 			yield return new WaitForFixedUpdate ();
 		}
