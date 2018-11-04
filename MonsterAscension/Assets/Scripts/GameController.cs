@@ -54,6 +54,7 @@ public class GameController : MonoBehaviour {
 	private int wavesUntilNextMonster = 4;
 
 	private PlayerController playerController;
+	private float boosting = 0;
 
 	void Start () {
 		GameObject player = GameObject.FindGameObjectWithTag("Player");
@@ -71,11 +72,40 @@ public class GameController : MonoBehaviour {
 		StartCoroutine(SpawnObjects());
 	}
 
+	public void Boost (float boost)
+	{
+		boosting += boost;
+
+		// If already boosting, don't need to start a new coroutine.
+		if (boosting > 0)
+		{
+			return;
+		}
+		StartCoroutine(_Boost());
+	}
+
+	IEnumerator _Boost ()
+	{
+		// Wait for time equal to "boosting". After the wait, check if boosting has been added more to, and if so, wait longer.
+		while (boosting > 0)
+		{
+			float time = boosting;
+			yield return new WaitForSeconds(time);
+			boosting -= time;
+		}
+		boosting = 0;
+	}
+
 	// How fast is the player moving?
 	// This is equivalent to how fast the tower is moving downwards.
 	public float GetPlayerSpeed ()
 	{
-		return basePlayerSpeed * speedMultipliers[playerController.GetLevel()];
+		float boostMultiplier = 1.0f;
+		if (boosting > 0)
+		{
+			boostMultiplier = playerController.boostMultiplier;
+		}
+		return basePlayerSpeed * speedMultipliers[playerController.GetLevel()] * boostMultiplier;
 	}
 
 	// How fast do objects fall at?

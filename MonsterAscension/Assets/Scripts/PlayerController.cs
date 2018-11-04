@@ -27,24 +27,26 @@ public class PlayerController : MonoBehaviour
 	
 	// How many monsters need to be collected, per level, to get to the next?
 	public int[] monsterLevels = new int[] { 5, 10, 20 };
+	
+	// The time a player gets boosted when they collect a Monster when they're max level, in seconds:
+	public float boostTime = 2.0f;
+
+	// The multiplier on how fast the player goes while boosting.
+	public float boostMultiplier = 1.2f;
 
 	// In degrees:
 	private float rotation = 0f;
 
 	// In set {-1, 0, 1}, from Input.GetAxisRaw()
 	private int rotationInput;
-
-	// Calculated as 360 / towerSides.
-	private float rotationIncrement;
-
+	
 	// In range 0-3 (for 4 levels):
 	private int level = 0;
 
 	// Counts up to monsterLevels[level], then levels-up:
 	private int monstersCollected = 0;
 
-	// Number of lanes to the tower, derived from GameController
-	private int lanes;
+	private GameController gameController;
 
 	private Transform cameraTransform;
 	public Image GameOverImage; 
@@ -72,8 +74,9 @@ public class PlayerController : MonoBehaviour
 		}
 		else
 		{
-			lanes = game.GetComponent<GameController>().lanes;
+			gameController = game.GetComponent<GameController>();
 		}
+
 		///GameOverImage.enabled = false;
 		UpdateTransforms();
 	}
@@ -87,7 +90,7 @@ public class PlayerController : MonoBehaviour
 	// Public accessor: returns the lane the player is in
 	public int GetLane ()
 	{
-		return (int) Mathf.Round((-rotation + 90) / 360 * lanes);
+		return (int) Mathf.Round((-rotation + 90) / 360 * gameController.lanes);
 	}
 
 	// Called when the final monster for this level has been collected.
@@ -117,7 +120,10 @@ public class PlayerController : MonoBehaviour
 	void CollectMonster()
 	{
 		monstersCollected++;
-		if (monstersCollected >= monsterLevels[level])
+		if (level >= monsterLevels.Length)
+		{
+			gameController.Boost(boostTime);
+		} else if (monstersCollected >= monsterLevels[level])
 		{
 			monstersCollected = 0;
 			LevelUp();
@@ -181,7 +187,7 @@ public class PlayerController : MonoBehaviour
 
 	float RoundToNearestLane (float rotation)
 	{
-		return (float) Math.Floor(rotation / 360 * lanes) * 360 / lanes;
+		return (float) Math.Floor(rotation / 360 * gameController.lanes) * 360 / gameController.lanes;
 	}
 
 	void UpdateTransforms ()
