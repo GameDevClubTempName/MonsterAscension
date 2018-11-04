@@ -112,7 +112,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e30d0fde0dab52945afed4aabc4d976b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destroyHeight: -10
+  destroyHeight: -20
 --- !u!135 &135189115923593042
 SphereCollider:
   m_ObjectHideFlags: 1

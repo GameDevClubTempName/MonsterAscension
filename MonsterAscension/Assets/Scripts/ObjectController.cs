@@ -8,7 +8,7 @@ public class ObjectController : MonoBehaviour {
 
 	private GameController gameController;
 	private float speed;
-
+	
 	void Start ()
 	{
 		GameObject game = GameObject.FindGameObjectWithTag("GameController");
@@ -20,12 +20,11 @@ public class ObjectController : MonoBehaviour {
 		{
 			gameController = game.GetComponent<GameController>();
 		}
-		speed = gameController.GetSpeed();
 	}
 
 	void FixedUpdate () {
 		float x = transform.position.x;
-		float y = transform.position.y - Time.fixedDeltaTime * speed;
+		float y = transform.position.y - Time.fixedDeltaTime * gameController.GetObjectSpeed();
 		float z = transform.position.z;
 
 		if (y < destroyHeight)
