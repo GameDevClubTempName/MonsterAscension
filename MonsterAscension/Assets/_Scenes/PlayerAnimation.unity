@@ -267,7 +267,7 @@ GameObject:
   - component: {fileID: 1710582859}
   - component: {fileID: 1710582858}
   - component: {fileID: 1710582857}
-  - component: {fileID: 1710582856}
+  - component: {fileID: 1710582855}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -275,7 +275,7 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1710582856
+--- !u!114 &1710582855
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -283,15 +283,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1710582854}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d04beda0d6537c4d89d7f6216a5a9de, type: 3}
+  m_Script: {fileID: 11500000, guid: 9a256d87b92af4d41bad675ab19d41d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   rotationSpeed: 540
-  playerDistanceFromTower: 0.6
-  cameraDistanceFromTower: 1
+  playerDistance: 5
+  cameraDistance: 10
+  backgroundDistance: 15
   playerHeight: 5
-  lightHeight: 20
-  lanes: 8
+  cameraHeight: 6
+  lanes: 16
+  monsterLevels: 050000000a00000014000000
 --- !u!65 &1710582857
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -370,6 +372,7 @@ GameObject:
   - component: {fileID: 1741674732}
   - component: {fileID: 1741674731}
   - component: {fileID: 1741674730}
+  - component: {fileID: 1741674733}
   m_Layer: 0
   m_Name: Animation
   m_TagString: Untagged
@@ -432,7 +435,7 @@ Animator:
   m_GameObject: {fileID: 1741674729}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 87a66bd64a987864ab011869f8aaa0a3, type: 2}
+  m_Controller: {fileID: 22100000, guid: f1c311e13c8045442a4ced80ea3d2d6b, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -454,6 +457,18 @@ Transform:
   m_Father: {fileID: 1710582860}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1741674733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1741674729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 651a3fab31c6ad5469c7d7e3b352ad21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Animation: {fileID: 0}
 --- !u!1 &1955496943
 GameObject:
   m_ObjectHideFlags: 0
