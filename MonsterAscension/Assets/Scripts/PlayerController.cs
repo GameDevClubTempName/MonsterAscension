@@ -54,6 +54,10 @@ public class PlayerController : MonoBehaviour
 	public AudioClip rockHit;
 	public AudioClip monsterGet;
 
+	public float[] moveSoundDelay = new float[] {.2f, .2f, .2f, 2f};
+
+	public AudioSource aSource;
+
 	private Transform cameraTransform;
 	public Image GameOverImage; 
 	public Animator Animator;
@@ -84,6 +88,26 @@ public class PlayerController : MonoBehaviour
 		}
 		///GameOverImage.enabled = false;
 		UpdateTransforms();
+		StartCoroutine (MoveSounds ());
+	}
+
+	private IEnumerator MoveSounds() {
+		while (true) {
+			aSource.Play ();
+			yield return new WaitForSeconds (moveSoundDelay[level]);
+		}
+	}
+
+	private void setMoveClip() {
+		if (level <= 0) {
+			aSource.clip = lv0Move;
+		} else if (level == 1) {
+			aSource.clip = lv1Move;
+		} else if (level == 2) {
+			aSource.clip = lv2Move;
+		} else {
+			aSource.clip = lv3Move;
+		}
 	}
 
 	// Public accessor:
@@ -102,16 +126,9 @@ public class PlayerController : MonoBehaviour
 	void LevelUp ()
 	{
 		level++;
-		if(level == 1){
-			Animator.Play("playerAnimation1");
-		}else if (level ==2){
-			Animator.Play("playerAnimation2");
-		}else if(level == 3){
-			Animator.Play("playerAnimation3");
-		}else if(level == 4){
-			Animator.Play("playerAnimation4");
-		}
-		// Animation-switching code here
+		setMoveClip ();
+		aSource.PlayOneShot (levelUp);
+		Animator.SetInteger ("Level", level);
 	}
 
 	// Called when player has hit a hazard on the lowest level.
@@ -125,6 +142,7 @@ public class PlayerController : MonoBehaviour
 	void CollectMonster()
 	{
 		monstersCollected++;
+		aSource.PlayOneShot (monsterGet);
 		if (monstersCollected >= monsterLevels[level])
 		{
 			monstersCollected = 0;
@@ -136,7 +154,10 @@ public class PlayerController : MonoBehaviour
 	void HitHazard ()
 	{
 		level--;
+		Animator.SetInteger ("Level", level);
+		setMoveClip ();
 		monstersCollected = 0;
+		aSource.PlayOneShot (rockHit);
 		if (level < 0)
 		{
 			level = 0;
