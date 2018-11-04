@@ -46,8 +46,20 @@ public class PlayerController : MonoBehaviour
 
 	// Number of lanes to the tower, derived from GameController
 	private int lanes;
-
+	
 	private SliderController sliderController;
+
+	public AudioClip levelUp;
+	public AudioClip lv0Move;
+	public AudioClip lv1Move;
+	public AudioClip lv2Move;
+	public AudioClip lv3Move;
+	public AudioClip rockHit;
+	public AudioClip monsterGet;
+
+	public float[] moveSoundDelay = new float[] {.2f, .2f, .2f, 2f};
+
+	public AudioSource aSource;
 
 	private Transform cameraTransform;
 	public Image GameOverImage; 
@@ -91,6 +103,26 @@ public class PlayerController : MonoBehaviour
 		
 		LevelUpImage.enabled = false;
 		UpdateTransforms();
+		StartCoroutine (MoveSounds ());
+	}
+
+	private IEnumerator MoveSounds() {
+		while (true) {
+			aSource.Play ();
+			yield return new WaitForSeconds (moveSoundDelay[level]);
+		}
+	}
+
+	private void setMoveClip() {
+		if (level <= 0) {
+			aSource.clip = lv0Move;
+		} else if (level == 1) {
+			aSource.clip = lv1Move;
+		} else if (level == 2) {
+			aSource.clip = lv2Move;
+		} else {
+			aSource.clip = lv3Move;
+		}
 	}
 
 	// Public accessor:
@@ -113,7 +145,10 @@ public class PlayerController : MonoBehaviour
 		
 		LevelUpImage.enabled = true;
 		sliderController.levelUpSlider(monsterLevels[level]);
-		// Animation-switching code here
+		
+		setMoveClip ();
+		aSource.PlayOneShot (levelUp);
+		Animator.SetInteger ("Level", level);
 	}
 
 	// Called when player has hit a hazard on the lowest level.
@@ -130,6 +165,7 @@ public class PlayerController : MonoBehaviour
 	void CollectMonster()
 	{
 		monstersCollected++;
+		aSource.PlayOneShot (monsterGet);
 		if (monstersCollected >= monsterLevels[level])
 		{
 			monstersCollected = 0;
@@ -143,7 +179,11 @@ public class PlayerController : MonoBehaviour
 	void HitHazard ()
 	{
 		level--;
+		Animator.SetInteger ("Level", level);
+		setMoveClip ();
 		monstersCollected = 0;
+
+		aSource.PlayOneShot (rockHit);
 
 		if (level < 0)
 		{
