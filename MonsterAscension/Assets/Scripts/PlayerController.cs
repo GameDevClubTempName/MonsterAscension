@@ -67,7 +67,7 @@ public class PlayerController : MonoBehaviour
 		{
 			lanes = game.GetComponent<GameController>().lanes;
 		}
-		GameOverImage.enabled = false;
+		///GameOverImage.enabled = false;
 		UpdateTransforms();
 	}
 
@@ -102,7 +102,7 @@ public class PlayerController : MonoBehaviour
 	// Called when player has hit a hazard on the lowest level.
 	void GameOver ()
 	{
-		GameOverImage.enabled = true;
+		//GameOverImage.enabled = true;
 		// Switch to game-over screen here
 	}
 
