@@ -171,7 +171,7 @@ public class PlayerController : MonoBehaviour
 		transform.position = new Vector3(-playerDistance * x, playerHeight, -playerDistance * z);
 		cameraTransform.position = new Vector3(-cameraDistance * x, cameraHeight, -cameraDistance * z);
 
-		transform.rotation = Quaternion.Euler(0, rotation, 0);
+		transform.rotation = Quaternion.Euler(0, -rotation, 0);
 		cameraTransform.rotation = Quaternion.Euler(0, -rotation + 90, 0);
 	}
 
