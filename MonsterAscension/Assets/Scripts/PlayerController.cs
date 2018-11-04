@@ -10,14 +10,12 @@ public class PlayerController : MonoBehaviour
 	public float rotationSpeed = 540.0f;
 
 	// In units:
-<<<<<<< HEAD:MonsterAscension/Assets/_Scripts/PlayerController.cs
+
 	public float playerDistanceFromTower = 0.9f;
 	public float cameraDistanceFromTower = 1.0f;
-=======
 	public float playerDistance = 5.0f;
 	public float cameraDistance = 10.0f;
 	public float backgroundDistance = 15.0f;
->>>>>>> In-GameUi:MonsterAscension/Assets/Scripts/PlayerController.cs
 	public float playerHeight = 5.0f;
 
 	// How many sides are there to the tower?
