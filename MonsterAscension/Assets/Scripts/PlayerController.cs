@@ -8,6 +8,10 @@ public class PlayerController : MonoBehaviour
 	//contains position for player to look at
 	public Transform center;
 
+	//holds the particle system
+	public ParticleSystem parWings1;
+	public ParticleSystem parWings2;
+
 	// In degrees per second:
 	public float rotationSpeed = 540.0f;
 
@@ -119,6 +123,8 @@ public class PlayerController : MonoBehaviour
 		{
 			// CollectMonster();
 			Destroy(collider.gameObject);
+			parWings1.Play ();
+			parWings2.Play ();
 		}
 	}
 
