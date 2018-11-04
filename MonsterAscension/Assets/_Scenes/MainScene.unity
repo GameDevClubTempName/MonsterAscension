@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: c4f46ad2111722946961f219ed862f65, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.5594466, g: 0.70643467, b: 0.85781837, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -9692,6 +9692,9 @@ MonoBehaviour:
   monsterRange: 4
   minWavesUntilNextMonster: 1
   maxWavesUntilNextMonster: 2
+  finalScore: 0
+  highScore: 0
+  mainScene: 1
 --- !u!1 &442297877
 GameObject:
   m_ObjectHideFlags: 0
@@ -10138,6 +10141,48 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &836946216
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 836946218}
+  - component: {fileID: 836946217}
+  m_Layer: 0
+  m_Name: HighScoreController
+  m_TagString: HighScore
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &836946217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 836946216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe5347757711cca4ebb59a81a217aa97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  finalScore: 0
+  highScore: 0
+--- !u!4 &836946218
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 836946216}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &933861879
 GameObject:
@@ -10818,7 +10863,7 @@ MonoBehaviour:
   backgroundDistance: 15
   playerHeight: -7
   cameraHeight: 0
-  monsterLevels: 02000000020000000200000001000000
+  monsterLevels: 04000000060000000c00000001000000
   levelUp: {fileID: 8300000, guid: e32beee2b0423534991a1e5545b9e3f4, type: 3}
   lv0Move: {fileID: 8300000, guid: 288c5e760d95b8f4099b0a0fda0d2098, type: 3}
   lv1Move: {fileID: 8300000, guid: aa8213b6e9c7a624c809a0ceb8bd887c, type: 3}
@@ -10839,6 +10884,8 @@ MonoBehaviour:
   playerAnimation2: []
   playerAnimation3: []
   playerAnimation4: []
+  highScore: {fileID: 836946217}
+  timeScore: {fileID: 1391823624}
 --- !u!82 &1794589086
 AudioSource:
   m_ObjectHideFlags: 0

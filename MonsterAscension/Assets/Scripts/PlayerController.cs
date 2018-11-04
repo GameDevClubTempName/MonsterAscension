@@ -69,9 +69,21 @@ public class PlayerController : MonoBehaviour
 	public AnimationClip[] playerAnimation2;
 	public AnimationClip[] playerAnimation3;
 	public AnimationClip[] playerAnimation4;
+
+	public HighScore highScore;
+	public TimeScore timeScore;
 	
 	void Start()
 	{	
+		GameObject hs = GameObject.FindGameObjectWithTag("HighScore");
+		if (hs == null)
+		{
+			Debug.Log("Game controller not found!");
+		} else
+		{
+			highScore = hs.GetComponent<HighScore>();
+		}
+
 		GameObject camera = GameObject.FindGameObjectWithTag("MainCamera");
 		if (camera == null)
 		{
@@ -160,6 +172,8 @@ public class PlayerController : MonoBehaviour
 		monstersCollected = 0;
 		sliderController.levelUpSlider(monsterLevels[0]);
 		sliderController.updateSlider(0);
+		int playerScore = (int)timeScore.playerScore;
+		highScore.CheckHighScore (playerScore);
 		SceneManager.LoadScene("GameOver" , LoadSceneMode.Single);
 		// Switch to game-over screen here
 	}

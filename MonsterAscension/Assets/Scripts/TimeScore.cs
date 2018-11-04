@@ -17,7 +17,7 @@ public class TimeScore : MonoBehaviour {
         } else
         {
             gameController = game.GetComponent<GameController>();
-        }
+		}
     }
 
     // Update is called once per frame

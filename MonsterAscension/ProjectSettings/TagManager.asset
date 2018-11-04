@@ -9,6 +9,7 @@ TagManager:
   - Hazard
   - Monster
   - Slider
+  - HighScore
   layers:
   - Default
   - TransparentFX

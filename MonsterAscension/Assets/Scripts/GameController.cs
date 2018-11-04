@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour {
 
@@ -53,9 +54,18 @@ public class GameController : MonoBehaviour {
 	public int maxWavesUntilNextMonster = 5;
 	private int wavesUntilNextMonster = 4;
 
+	public int finalScore;
+	public float highScore = 0f;
+	public bool mainScene = true;
+
 	private PlayerController playerController;
 
 	void Start () {
+		StartStuff ();
+	}
+
+	void StartStuff() {
+
 		GameObject player = GameObject.FindGameObjectWithTag("Player");
 		if (player == null)
 		{
@@ -70,6 +80,7 @@ public class GameController : MonoBehaviour {
 		StartTower();
 		StartCoroutine(SpawnObjects());
 	}
+
 
 	// How fast is the player moving?
 	// This is equivalent to how fast the tower is moving downwards.
@@ -103,7 +114,7 @@ public class GameController : MonoBehaviour {
 	{
 		yield return new WaitForSeconds(startWait);
 		bool alternator = false;
-		while (true)
+		while (mainScene)
 		{
 			bool monsterSpawn = false;
 			wavesUntilNextMonster--;
@@ -154,7 +165,7 @@ public class GameController : MonoBehaviour {
 	}
 	
 	IEnumerator TowerScrolling () {
-		while (true) {
+		while (mainScene) {
 
 			if (towerDown.transform.position.y <= towerDestroy.position.y) {
 				float newY = towerDown.transform.position.y + 60;
