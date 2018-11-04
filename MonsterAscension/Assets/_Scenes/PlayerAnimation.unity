@@ -289,10 +289,8 @@ MonoBehaviour:
   rotationSpeed: 540
   playerDistance: 5
   cameraDistance: 10
-  backgroundDistance: 15
   playerHeight: 5
   cameraHeight: 6
-  lanes: 16
   monsterLevels: 050000000a00000014000000
 --- !u!65 &1710582857
 BoxCollider:
@@ -468,7 +466,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 651a3fab31c6ad5469c7d7e3b352ad21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Animation: {fileID: 0}
+  characterlevel: 0
+  playerAnimation1: []
+  playerAnimation2: []
+  playerAnimation3: []
+  playerAnimation4: []
+  ZombieAnimator: {fileID: 22100000, guid: f1c311e13c8045442a4ced80ea3d2d6b, type: 2}
+  Animator: {fileID: 1741674731}
 --- !u!1 &1955496943
 GameObject:
   m_ObjectHideFlags: 0
