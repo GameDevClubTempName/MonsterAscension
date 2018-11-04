@@ -8,7 +8,8 @@ public class changeAnimation : MonoBehaviour {
 	public AnimationClip[] playerAnimation2;
 	public AnimationClip[] playerAnimation3;
 	public AnimationClip[] playerAnimation4;
-	public AnimatorOverrideController ZombieAnimator; 
+	public AnimatorOverrideController ZombieAnimator;
+	public Animator Animator;  
 	// Use this for initialization
 	void Start () {
 		
@@ -17,13 +18,13 @@ public class changeAnimation : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(characterlevel == 1){
-			ZombieAnimator[playerAnimation1];
+			Animator.Play("playerAnimation1");
 		}else if (characterlevel ==2){
-			ZombieAnimator[playerAnimation2];
+			Animator.Play("playerAnimation2");
 		}else if(characterlevel == 3){
-			ZombieAnimator[playerAnimation3];
+			Animator.Play("playerAnimation3");
 		}else if(characterlevel == 4){
-			ZombieAnimator[playerAnimation4];
+			Animator.Play("playerAnimation4");
 		}
 	}
 }
