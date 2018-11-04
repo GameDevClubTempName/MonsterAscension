@@ -4,16 +4,15 @@ using UnityEngine;
 using UnityEngine.UI; 
 
 public class LevelUP : MonoBehaviour {
-	public bool levelUp; 
-	public Image levelUpImage; 
-	// Use this for initialization
+	public bool levelUp;
+	public Image levelUpImage;
+	
 	void Start () {
 		levelUpImage.enabled = false; 
 	}
 	
-	// Update is called once per frame
 	void Update () {
-		if(levelUp){
+		if (levelUp) {
 			levelUpImage.enabled = true; 
 		}
 	}
