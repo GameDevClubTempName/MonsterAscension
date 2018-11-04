@@ -69,7 +69,10 @@ public class GameController : MonoBehaviour {
 	IEnumerator SpawnObjectOnDelay(GameObject hazard, Vector3 spawnPosition, Quaternion spawnRotation, float delay)
 	{
 		yield return new WaitForSeconds(delay);
-		Instantiate(hazard, spawnPosition, spawnRotation);
+		GameObject newHazard = Instantiate(hazard, spawnPosition, spawnRotation);
+		newHazard.transform.LookAt (towerOneSpawn);
+		float newY = newHazard.transform.eulerAngles.y;
+		newHazard.transform.eulerAngles = new Vector3 (0, newY, 0);
 	}
 
 	IEnumerator SpawnObjects ()

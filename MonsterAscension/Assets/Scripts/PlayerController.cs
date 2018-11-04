@@ -5,6 +5,8 @@ using System;
 
 public class PlayerController : MonoBehaviour
 {
+	//contains position for player to look at
+	public Transform center;
 
 	// In degrees per second:
 	public float rotationSpeed = 540.0f;
@@ -111,12 +113,24 @@ public class PlayerController : MonoBehaviour
 		if (collider.gameObject.tag == "Hazard")
 		{
 			// HitHazard();
+			StartCoroutine(blinkPlayer());
 			Destroy(collider.gameObject);
 		} else if (collider.gameObject.tag == "Monster")
 		{
 			// CollectMonster();
 			Destroy(collider.gameObject);
 		}
+	}
+
+	private IEnumerator blinkPlayer() {
+		bool blinking = false;
+		GetComponent<BoxCollider> ().enabled = false;
+		for (int i = 0; i < 8; i++) {
+			GetComponent<SpriteRenderer> ().enabled = blinking;
+			blinking = !blinking;
+			yield return new WaitForSeconds (.25f);
+		}
+		GetComponent<BoxCollider> ().enabled = true;
 	}
 
 	float ConstrainRotation (float rotation)
@@ -145,7 +159,8 @@ public class PlayerController : MonoBehaviour
 		transform.position = new Vector3(-playerDistance * x, playerHeight, -playerDistance * z);
 		cameraTransform.position = new Vector3(-cameraDistance * x, cameraHeight, -cameraDistance * z);
 
-		transform.rotation = Quaternion.Euler(0, rotation, 0);
+		//transform.rotation = Quaternion.Euler(0, rotation, 0);
+		transform.LookAt(center);
 		cameraTransform.rotation = Quaternion.Euler(0, -rotation + 90, 0);
 	}
 
