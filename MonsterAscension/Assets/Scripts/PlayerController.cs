@@ -46,6 +46,14 @@ public class PlayerController : MonoBehaviour
 	// Number of lanes to the tower, derived from GameController
 	private int lanes;
 
+	public AudioClip levelUp;
+	public AudioClip lv0Move;
+	public AudioClip lv1Move;
+	public AudioClip lv2Move;
+	public AudioClip lv3Move;
+	public AudioClip rockHit;
+	public AudioClip monsterGet;
+
 	private Transform cameraTransform;
 	public Image GameOverImage; 
 	public Animator Animator;
