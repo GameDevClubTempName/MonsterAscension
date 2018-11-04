@@ -318,7 +318,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 15
+  orthographic size: 12
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -670,12 +670,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1794589080}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d04beda0d6537c4d89d7f6216a5a9de, type: 3}
+  m_Script: {fileID: 11500000, guid: 9a256d87b92af4d41bad675ab19d41d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   rotationSpeed: 180
+  playerDistanceFromTower: 0.9
+  cameraDistanceFromTower: 1
   playerDistance: 12
   cameraDistance: 15
-  playerHeight: 0
-  cameraHeight: 1
+  backgroundDistance: 15
+  playerHeight: 5
+  cameraHeight: 6
   monsterLevels: 050000000a00000014000000
