@@ -140,15 +140,18 @@ public class PlayerController : MonoBehaviour
 	// Called when the final monster for this level has been collected.
 	void LevelUp ()
 	{
-		level++;
-		Animator.Play("playerAnimation" + level.ToString());
-		
-		LevelUpImage.enabled = true;
-		sliderController.levelUpSlider(monsterLevels[level]);
-		
-		setMoveClip ();
-		aSource.PlayOneShot (levelUp);
-		Animator.SetInteger ("Level", level);
+		if (level < 3)
+		{
+			level++;
+			Animator.Play("playerAnimation" + level.ToString());
+
+			LevelUpImage.enabled = true;
+			sliderController.levelUpSlider(monsterLevels[level]);
+
+			setMoveClip();
+			aSource.PlayOneShot(levelUp);
+			Animator.SetInteger("Level", level);
+		}
 	}
 
 	// Called when player has hit a hazard on the lowest level.
@@ -201,15 +204,15 @@ public class PlayerController : MonoBehaviour
 	{
 		if (collider.gameObject.tag == "Hazard")
 		{
+			StartCoroutine(blinkPlayer());
 			HitHazard();
-			//StartCoroutine(blinkPlayer());
 			Destroy(collider.gameObject);
 		} else if (collider.gameObject.tag == "Monster")
 		{
 			CollectMonster();
 			Destroy(collider.gameObject);
-			//parWings1.Play ();
-			//parWings2.Play ();
+			parWings1.Play ();
+			parWings2.Play ();
 		}
 	}
 
