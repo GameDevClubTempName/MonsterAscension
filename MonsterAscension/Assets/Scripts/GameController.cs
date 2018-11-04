@@ -126,7 +126,7 @@ public class GameController : MonoBehaviour {
 
 		StartCoroutine (TowerScrolling());
 	}
-
+	
 	IEnumerator TowerScrolling () {
 		while (true) {
 

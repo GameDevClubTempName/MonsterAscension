@@ -105,16 +105,17 @@ public class PlayerController : MonoBehaviour
 	// Called when the player hits an object.
 	// If object is a hazard, calls HitHazard() and destroys object.
 	// If object is a Monster can, calls CollectMonster() and destroys object.
-	void OnCollisionEnter (Collision collision)
+	void OnTriggerEnter (Collider collider)
 	{
-		if (collision.gameObject.tag == "Hazard")
+		Debug.Log("Collision!");
+		if (collider.gameObject.tag == "Hazard")
 		{
 			// HitHazard();
-			Destroy(collision.gameObject);
-		} else if (collision.gameObject.tag == "Monster")
+			Destroy(collider.gameObject);
+		} else if (collider.gameObject.tag == "Monster")
 		{
 			// CollectMonster();
-			Destroy(collision.gameObject);
+			Destroy(collider.gameObject);
 		}
 	}
 
@@ -145,7 +146,7 @@ public class PlayerController : MonoBehaviour
 		cameraTransform.position = new Vector3(-cameraDistance * x, cameraHeight, -cameraDistance * z);
 
 		transform.rotation = Quaternion.Euler(0, rotation, 0);
-		cameraTransform.rotation = Quaternion.Euler(0, rotation, 0);
+		cameraTransform.rotation = Quaternion.Euler(0, -rotation + 90, 0);
 	}
 
 	void FixedUpdate ()

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -252,17 +252,25 @@ MonoBehaviour:
   towerOneSpawn: {fileID: 933861880}
   towerTwoSpawn: {fileID: 688543011}
   towerDestroy: {fileID: 98853336}
-  towerDestroyY: 0
+  monster: {fileID: 1153219628216938, guid: 3c0db09c064d6d743adc844b9a739d7e, type: 2}
   spawnHeight: 30
   spawnDistance: 12
   lanes: 16
-  maxSpawnAttempts: 0
+  maxSpawnAttempts: 12
   spawnWait: 1
   startWait: 1
+  levelupWait: 0
   spawnNoise: 0.2
   towerSpeed: 0.05
-  towerUp: {fileID: 0}
-  towerDown: {fileID: 0}
+  baseSpeed: 8
+  speedMultipliers:
+  - 1
+  - 1.2
+  - 1.5
+  - 2
+  monsterRange: 3
+  minWavesUntilNextMonster: 2
+  maxWavesUntilNextMonster: 6
 --- !u!1 &534669902
 GameObject:
   m_ObjectHideFlags: 0
@@ -367,6 +375,92 @@ Transform:
   m_Children: []
   m_Father: {fileID: 933861880}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &726253474
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 726253478}
+  - component: {fileID: 726253477}
+  - component: {fileID: 726253476}
+  - component: {fileID: 726253475}
+  m_Layer: 0
+  m_Name: Debug Tower Core
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!136 &726253475
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 726253474}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5000001
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!23 &726253476
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 726253474}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
+  m_Materials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!33 &726253477
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 726253474}
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &726253478
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 726253474}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 10, y: 40, z: 10}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &933861879
 GameObject:
@@ -580,9 +674,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d04beda0d6537c4d89d7f6216a5a9de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: 540
-  playerDistanceFromTower: 12
-  cameraDistanceFromTower: 20
-  playerHeight: 5
-  lightHeight: 20
-  lanes: 8
+  rotationSpeed: 180
+  playerDistance: 12
+  cameraDistance: 15
+  backgroundDistance: 15
+  playerHeight: 0
+  cameraHeight: 1
+  lanes: 16
+  monsterLevels: 050000000a00000014000000
