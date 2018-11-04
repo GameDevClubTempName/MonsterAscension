@@ -10,12 +10,12 @@ public class SliderController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		Slider.minValue = 0; 
-		Slider = GetComponentInChildren<Slider> ();
+		
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		Slider.Set(monstersCollected);
+		Slider.value = monstersCollected1;
 		
 		}
 	public void levelUpSlider(int monsterLevels){
