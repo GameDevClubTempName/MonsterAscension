@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -45,16 +46,32 @@ public class PlayerController : MonoBehaviour
 
 	// Number of lanes to the tower, derived from GameController
 	private int lanes;
+	
+	private SliderController sliderController;
+
+	public AudioClip levelUp;
+	public AudioClip lv0Move;
+	public AudioClip lv1Move;
+	public AudioClip lv2Move;
+	public AudioClip lv3Move;
+	public AudioClip rockHit;
+	public AudioClip monsterGet;
+
+	public float[] moveSoundDelay = new float[] {.2f, .2f, .2f, 2f};
+
+	public AudioSource aSource;
 
 	private Transform cameraTransform;
 	public Image GameOverImage; 
+	public Image LevelUpImage;
 	public Animator Animator;
 	public AnimationClip[] playerAnimation1;
 	public AnimationClip[] playerAnimation2;
 	public AnimationClip[] playerAnimation3;
 	public AnimationClip[] playerAnimation4;
+	
 	void Start()
-	{
+	{	
 		GameObject camera = GameObject.FindGameObjectWithTag("MainCamera");
 		if (camera == null)
 		{
@@ -74,8 +91,38 @@ public class PlayerController : MonoBehaviour
 		{
 			lanes = game.GetComponent<GameController>().lanes;
 		}
-		///GameOverImage.enabled = false;
+
+		GameObject slider = GameObject.FindGameObjectWithTag("Slider");
+		if (slider == null)
+		{
+			Debug.Log("Slider not found!");
+		} else
+		{
+			sliderController = slider.GetComponent<SliderController>();
+		}
+		
+		LevelUpImage.enabled = false;
 		UpdateTransforms();
+		StartCoroutine (MoveSounds ());
+	}
+
+	private IEnumerator MoveSounds() {
+		while (true) {
+			aSource.Play ();
+			yield return new WaitForSeconds (moveSoundDelay[level]);
+		}
+	}
+
+	private void setMoveClip() {
+		if (level <= 0) {
+			aSource.clip = lv0Move;
+		} else if (level == 1) {
+			aSource.clip = lv1Move;
+		} else if (level == 2) {
+			aSource.clip = lv2Move;
+		} else {
+			aSource.clip = lv3Move;
+		}
 	}
 
 	// Public accessor:
@@ -93,23 +140,27 @@ public class PlayerController : MonoBehaviour
 	// Called when the final monster for this level has been collected.
 	void LevelUp ()
 	{
-		level++;
-		if(level == 1){
-			Animator.Play("playerAnimation1");
-		}else if (level ==2){
-			Animator.Play("playerAnimation2");
-		}else if(level == 3){
-			Animator.Play("playerAnimation3");
-		}else if(level == 4){
-			Animator.Play("playerAnimation4");
+		if (level < 3)
+		{
+			level++;
+			Animator.Play("playerAnimation" + level.ToString());
+
+			LevelUpImage.enabled = true;
+			sliderController.levelUpSlider(monsterLevels[level]);
+
+			setMoveClip();
+			aSource.PlayOneShot(levelUp);
+			Animator.SetInteger("Level", level);
 		}
-		// Animation-switching code here
 	}
 
 	// Called when player has hit a hazard on the lowest level.
 	void GameOver ()
 	{
-		//GameOverImage.enabled = true;
+		monstersCollected = 0;
+		sliderController.levelUpSlider(monsterLevels[0]);
+		sliderController.updateSlider(0);
+		SceneManager.LoadScene("GameOver" , LoadSceneMode.Single);
 		// Switch to game-over screen here
 	}
 
@@ -117,23 +168,33 @@ public class PlayerController : MonoBehaviour
 	void CollectMonster()
 	{
 		monstersCollected++;
+		aSource.PlayOneShot (monsterGet);
 		if (monstersCollected >= monsterLevels[level])
 		{
 			monstersCollected = 0;
 			LevelUp();
 		}
+
+		sliderController.updateSlider(monstersCollected);
 	}
 
 	// Called whenever the player hits a hazard.
 	void HitHazard ()
 	{
 		level--;
+		Animator.SetInteger ("Level", level);
+		setMoveClip ();
 		monstersCollected = 0;
+
+		aSource.PlayOneShot (rockHit);
+
 		if (level < 0)
 		{
 			level = 0;
 			GameOver();
 		}
+
+		sliderController.updateSlider(0);
 	}
 	
 	// Called when the player hits an object.
@@ -143,8 +204,8 @@ public class PlayerController : MonoBehaviour
 	{
 		if (collider.gameObject.tag == "Hazard")
 		{
-			HitHazard();
 			StartCoroutine(blinkPlayer());
+			HitHazard();
 			Destroy(collider.gameObject);
 		} else if (collider.gameObject.tag == "Monster")
 		{

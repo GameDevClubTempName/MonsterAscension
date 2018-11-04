@@ -1,13 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement; 
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
-public class UIController : MonoBehaviour {
+public class GameOverButton : MonoBehaviour {
+	public Image GameOverImage; 
+
+	void Start () {
+		GameOverImage.enabled = true;
+	}
+	
 	void Update () {
 		if (Input.GetMouseButtonDown(0)) {
 			SceneManager.LoadScene("MainScene" , LoadSceneMode.Single);
-			Debug.Log("Scene switched from UI to MainScene");
 		}
 	}
 }
